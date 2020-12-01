@@ -1,0 +1,26 @@
+{
+  "name": "focusbe",
+  "version": "0.0.1",
+  "description": "自定义模板文件,自动发布代码配置",
+  "author": "PengZai",
+  "main": "main.js",
+  "main-menu": {
+    "focusbe/使用方法": {
+      "message": "focusbe:usage"
+    }
+  },
+  "panel": {
+    "main": "panel/index.html",
+    "type": "simple",
+    "title": "构建",
+    "width": 400,
+    "height": 300
+  },
+  "scripts": {
+    
+  },
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^9.0.1"
+  }
+}
