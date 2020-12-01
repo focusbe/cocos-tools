@@ -13,7 +13,7 @@ function getConfig() {
     var assetsDir = Editor.Project.path;
     var configPath = path.resolve(assetsDir, ".focusbe/config.json");
     if (!isExits(configPath)) {
-      writeConfig(configPath, defaultConfig);
+      writeConfig(defaultConfig);
     }
     return JSON.parse(fs.readFileSync(configPath, "utf-8"));
   } catch (error) {
@@ -22,10 +22,12 @@ function getConfig() {
   }
 }
 
-function writeConfig(configPath, config) {
+function writeConfig(config) {
   try {
+    var assetsDir = Editor.Project.path;
+    var configPath = path.resolve(assetsDir, ".focusbe/config.json");
     isExits(configPath);
-    return fs.writeFileSync(configPath, JSON.stringify(config));
+    return fse.writeJSONSync(configPath, config, { spaces: 2 });
   } catch (error) {
     Editor.log(error);
   }
@@ -142,7 +144,7 @@ function autoDeploy() {
           var distFolder = path.resolve(Editor.Project.path, "./build/web-mobile");
           await fse.copy(distFolder, item.path);
           Editor.log(item.type);
-          if (item.type == "git") {
+          if (item.type == "local") {
             Editor.log('code "' + item.path + '"');
             exec('code "' + item.path + '"');
           }
@@ -168,7 +170,38 @@ module.exports = {
   unload() {
     Editor.Builder.removeListener("build-finished", onBuildFinish);
   },
+  // updateConfig(config){
+
+  // },
   messages: {
-    config() {},
+    usage() {
+      exec("start https://github.com/focusbe/cocos-tools");
+      // Editor.log("https://github.com/focusbe/cocos-tools");
+    },
+    config() {
+      Editor.Panel.open("focusbe");
+    },
+    updateConfig() {
+      var config = getConfig();
+      Editor.Ipc.sendToPanel("focusbe", "focusbe:updateConfig", config);
+    },
+    saveConfig(event, newconf) {
+      var config = getConfig();
+      Editor.log("保存config", newconf);
+      writeConfig(Object.assign(config, newconf));
+      Editor.Ipc.sendToPanel("focusbe", "focusbe:updateConfig", config);
+    },
+    removeDeploy(event, index) {
+      var config = getConfig();
+      config.deploy.splice(index, 1);
+      writeConfig(config);
+      Editor.Ipc.sendToPanel("focusbe", "focusbe:updateConfig", config);
+    },
+    addDeploy(event, deployItem) {
+      var config = getConfig();
+      config.deploy.push(deployItem);
+      writeConfig(config);
+      Editor.Ipc.sendToPanel("focusbe", "focusbe:updateConfig", config);
+    },
   },
 };

@@ -7,12 +7,15 @@
   "main-menu": {
     "focusbe/使用方法": {
       "message": "focusbe:usage"
+    },
+    "focusbe/配置": {
+      "message": "focusbe:config"
     }
   },
   "panel": {
     "main": "panel/index.html",
     "type": "simple",
-    "title": "构建",
+    "title": "Focusbe",
     "width": 400,
     "height": 300
   },
