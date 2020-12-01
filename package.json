@@ -16,8 +16,8 @@
     "main": "panel/index.html",
     "type": "simple",
     "title": "Focusbe",
-    "width": 400,
-    "height": 300
+    "width": 600,
+    "height": 600
   },
   "scripts": {
     

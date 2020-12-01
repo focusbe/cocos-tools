@@ -109,7 +109,6 @@ function onBuildFinish(options, callback) {
 
   try {
     var mainHtml = fs.readFileSync(path.resolve(options.dest, tplFile), "utf-8");
-    Editor.log(mainHtml);
   } catch (error) {
     Editor.error("读取模板文件失败");
     return;
@@ -142,8 +141,7 @@ function autoDeploy() {
         Editor.log("自动部署到" + item.path);
         try {
           var distFolder = path.resolve(Editor.Project.path, "./build/web-mobile");
-          await fse.copy(distFolder, item.path);
-          Editor.log(item.type);
+          await fse.copy(distFolder, item.path.replace(/\\/ig,'/'));
           if (item.type == "local") {
             Editor.log('code "' + item.path + '"');
             exec('code "' + item.path + '"');
@@ -199,7 +197,13 @@ module.exports = {
     },
     addDeploy(event, deployItem) {
       var config = getConfig();
+      
+      
+      if(!config.deploy){
+        config.deploy = [];
+      }
       config.deploy.push(deployItem);
+      
       writeConfig(config);
       Editor.Ipc.sendToPanel("focusbe", "focusbe:updateConfig", config);
     },

@@ -155,7 +155,7 @@
 
         <div>
           <label for="auto">构建后自动部署</label>
-          <input name="path" id="path" type="checkbox" />
+          <input name="auto" id="auto" type="checkbox" />
         </div>
 
         <button type="submit" class="big" id="btn">添加</button>
@@ -214,6 +214,7 @@
             alert("请补全信息");
             return false;
           }
+          console.log(json);
           Editor.Ipc.sendToMain("focusbe:addDeploy", json);
           $(this)[0].reset();
         } catch (error) {
